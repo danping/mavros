@@ -142,7 +142,12 @@ rosinstall_generator mavlink | tee -a /tmp/mavros.rosinstall
 # 4. workspace & deps
 wstool merge -t src /tmp/mavros.rosinstall
 wstool update -t src
+#first way : dependencies are installed through 'apt-get install'
 rosdep install --from-paths src --ignore-src --rosdistro indigo -y
+# alternative : all dependencies are installed from the source.
+rosinstall_generator `rosdep keys --from-paths src` | tee -a /tmp/mavros.rosinstall
+wstool merge -t src /tmp/mavros.rosinstall 
+wstool update -t src
 
 # 5. finally - build
 catkin build
